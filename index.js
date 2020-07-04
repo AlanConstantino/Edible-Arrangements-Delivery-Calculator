@@ -88,97 +88,14 @@ function isValidText(unformattedText) {
     return true;
 }
 
-// looks disgusting but it works
 function getFuelTotal(days) {
     let fuelTotal = 0;
     const stats = [];
-    let dailyFuel = 0;
     days.forEach(index => {
-        switch (index.length) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                fuelTotal += 10;
-                dailyFuel += 10;
-                break;
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
-                fuelTotal += 20;
-                dailyFuel += 20;
-                break;
-            case 21:
-            case 22:
-            case 23:
-            case 24:
-            case 25:
-            case 26:
-            case 27:
-            case 28:
-            case 29:
-            case 30:
-                fuelTotal += 30;
-                dailyFuel += 30;
-                break;
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-            case 36:
-            case 37:
-            case 38:
-            case 39:
-            case 40:
-                fuelTotal += 40;
-                dailyFuel += 40;
-                break;
-            case 41:
-            case 42:
-            case 43:
-            case 44:
-            case 45:
-            case 46:
-            case 47:
-            case 48:
-            case 49:
-            case 50:
-                fuelTotal += 50;
-                dailyFuel += 50;
-                break;
-            // there is no way anyone will ever get here, it's physically impossible
-            // 60 deliveries in a day will never happen
-            case 51:
-            case 52:
-            case 53:
-            case 54:
-            case 55:
-            case 56:
-            case 57:
-            case 58:
-            case 59:
-            case 60:
-                fuelTotal += 60;
-                dailyFuel += 60;
-                break;
-        }
-        stats.push(dailyFuel);
-        dailyFuel = 0;
+        if (index.length <= 10) fuelTotal += 10;
+        if (index.length >= 11) fuelTotal += 20;
     });
+    stats.push(fuelTotal);
     return { fuelTotal, stats };
 }
 
@@ -190,7 +107,7 @@ function getValueForEachDay(days) {
         7: 0,
         8: 0
     };
-    days.forEach((index, i) => {
+    days.forEach((index) => {
         index.forEach(zip => {
             const value = zipCodeValues[zip];
             total[value]++;
@@ -206,21 +123,13 @@ function getValueForEachDay(days) {
     return eachDay;
 }
 
-// creates an element of specified type
-// classes can be an array of classes or a singular class
-function createElement(typeOfElement = 'p', classes = '') {
+// Doesn't make sense to have an instance just to use this method therefore, it's static.
+// 'classes' can either be a single css class or an array of multiple css classes
+function createElement(typeOfElement = 'div', classes = '') {
     const element = document.createElement(typeOfElement);
-
-    if (classes === '') {
-        return element;
-    }
-
-    if (Array.isArray(classes)) {
-        classes.forEach(cssClass => element.classList.add(cssClass));
-    } else {
-        element.classList.add(classes);
-    }
-
+    if (classes === '') return element;
+    if (Array.isArray(classes)) classes.forEach(cssClass => element.classList.add(cssClass));
+    if (!Array.isArray(classes)) element.classList.add(classes);
     return element;
 }
 
@@ -247,7 +156,9 @@ form.addEventListener('submit', e => {
             .split('\n')
             .filter(string => string.match(/^[0-9]*$/));
         let temp = [];
+        console.log(arrayText)
 
+        // loop through each zip code in the array
         for (let i = 0; i < arrayText.length; i++) {
             // if there is a '', save temp to days and skip to next item in loop
             if (arrayText[i] === '') {
