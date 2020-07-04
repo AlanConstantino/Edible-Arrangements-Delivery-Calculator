@@ -45,19 +45,21 @@ form textarea {
     box-shadow: none;
     resize: none;
     width: 80vw;
-    height: 70vh;
 }
 
 .button {
     font-weight: bold;
     background-color: #000000;
     color: #ffffff;
-    width: 80vw;
-    height: 10vh;
+    width: 10rem;
+    height: 3rem;
 }
 
 /* border around button and textarea */
 form textarea, .button {
+    -ms-flex-item-align: center;
+    -ms-grid-row-align: center;
+    align-self: center;
     border: 0.1rem solid #071108;
     outline: none;
 }
@@ -65,8 +67,8 @@ form textarea, .button {
 .total-container {
     border: 0.1rem solid #071108;
     background-color: #00c677;
-    height: 95vh;
     width: 90vw;
+    height: 80vh;
     position: fixed;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -75,12 +77,6 @@ form textarea, .button {
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    -webkit-box-pack: space-evenly;
-    -ms-flex-pack: space-evenly;
-    justify-content: space-evenly;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
     visibility: hidden;
 }
 
@@ -98,6 +94,6 @@ form textarea, .button {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
-    width: 80vw;
-    height: 64vh;
+    -ms-flex-item-align: center;
+    align-self: center;
 }
