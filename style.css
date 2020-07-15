@@ -1,10 +1,21 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    color: #ffffff;
+    box-sizing: border-box;
+}
+
+html {
+    background-color: #303030;
 }
 
 body {
-    margin: 0 15%;
+    color: #D6CFCB;
+    padding: 0 15%;
+    padding-top: 1rem;
+    padding-bottom: 4rem;
 }
 
 form {
@@ -12,6 +23,46 @@ form {
     flex-direction: column;
 }
 
+textarea {
+    padding: 0.5rem 0;
+    outline: none;
+    resize: none;
+}
+
 .hide {
     display: none;
+}
+
+.button {
+    background-color: transparent;
+    border: 0.1rem solid #ffffff;
+    outline: none;
+    padding: 0.35rem;
+    border-radius: 2rem;
+}
+
+.button:hover {
+    cursor: pointer;
+    color: #303030;
+    background-color: #ffffff;
+}
+
+input, textarea {
+    margin-top: 1rem;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    text-align: center;
+}
+
+input {
+    border-radius: 0;
+    border-bottom: 0.1rem solid #ffffff;
+}
+
+textarea {
+    height: 60vh;
+    border: 0.1rem solid #ffffff;
+    border-radius: 0.5rem;
 }
