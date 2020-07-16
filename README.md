@@ -1,5 +1,7 @@
-# Edible-Arrangements-Delivery-Calculator
+# [Edible-Arrangements-Delivery-Calculator](https://calc.alanconstantino.com/)
 I made this calculator to help me get the total amount of money earned by making Edible Arrangements deliveries.
+
+You can view the website [here](https://calc.alanconstantino.com/).
 
 ## TODO:
 - [x] Add new styles to the forms.
