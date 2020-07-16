@@ -5,20 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./images/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./images/favicons/favicon-16x16.png">
+    <link rel="manifest" href="./images/favicons/site.webmanifest">
+    <title>Delivery Calculator</title>
 </head>
 
 <body>
     <form id="days-of-work">
         <label for="days">How many days did you work for?</label>
         <input type="number" id="days" min="1" max="7">
-        <input class="button" type="submit">
+        <input class="button" type="submit" value="Submit">
     </form>
     <!-- hidden by default -->
     <form id="individual-day" class="hide">
         <label for="zipcodes">Enter zip codes for day <span id="day-number"></span>:</label>
-        <textarea name="zipcodes" id="raw-zip-codes" cols="10" rows="10"></textarea>
-        <input class="button" type="submit">
+        <textarea name="zipcodes" id="raw-zip-codes" cols="5" rows="40"></textarea>
+        <input class="button" type="submit" value="Submit">
     </form>
     <!-- hidden by default -->
     <form class="hide">

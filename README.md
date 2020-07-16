@@ -2,11 +2,11 @@
 I made this calculator to help me get the total amount of money earned by making Edible Arrangements deliveries.
 
 ## TODO:
-- [ ] Add new styles to the forms.
+- [x] Add new styles to the forms.
 - [ ] See if it's viable to add a button that allows you to download all the data either as a PDF or an excel sheet which mimics the Edible Arrangements sheet.
 
 ## Bugs
-- [ ] When entering zip codes for each day of work, you are able to submit the form without zip codes. Should prompt the user for an error telling them to enter a zip code. Should also not move on to next day until zip codes for the current day are given.
-- [ ] Having a newline after the final zip code in "Enter zip codes for day X" form shouldn't give an error.
+- [x] When entering zip codes for each day of work, you are able to submit the form without zip codes. Should prompt the user for an error telling them to enter a zip code. Should also not move on to next day until zip codes for the current day are given.
+- [x] Having a newline after the final zip code in "Enter zip codes for day X" form shouldn't give an error.
       - If you have a newline, or multiple newlines after the final zipcode, it should just ignore them, not prompt you with an error.
-- [ ] In Microsoft Edge, the button for the "days-of-work" form and "individual-day" form have the text "Submit Query" instead of "Submit".
+- [x] In Microsoft Edge, the button for the "days-of-work" form and "individual-day" form have the text "Submit Query" instead of "Submit".
