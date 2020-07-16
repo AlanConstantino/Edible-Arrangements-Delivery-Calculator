@@ -1,7 +1,17 @@
 # [Edible-Arrangements-Delivery-Calculator](https://calc.alanconstantino.com/)
+
 I made this calculator to help me get the total amount of money earned by making Edible Arrangements deliveries.
 
 You can view the website [here](https://calc.alanconstantino.com/).
+
+
+### Technologies used:
+- Node.js
+  - To manage packages and dependecies such as ESLint, Babel, and Webpack.
+- Webpack
+  - For bundling all JavaScript files into a single file.
+- Babel
+  - For cross-browser compatible JavaScript.
 
 ## TODO:
 - [x] Add new styles to the forms.
