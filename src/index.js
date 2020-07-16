@@ -39,9 +39,23 @@ individualDayForm.addEventListener('submit', e => individialDayFormHandler(e));
 
 function individialDayFormHandler(e) {
   e.preventDefault();
+
   const userZips = rawZipCodesTextArea.value
+    .trim()
     .replace(/\n+/g, '\n')
     .split('\n');
+
+  // has to be for loop because a for-each loop is treated as a function which means if you
+  // were to return out, you return out of the for-each function and not individialDayFormHandler()
+  for (let i = 0; i < userZips.length; i++) {
+    const zipIsNotValid = !util.isValid(zipCodes[userZips[i]]);
+    if (zipIsNotValid) {
+      const message = `The zip code '${userZips[i]}' does not exist. Try again.`;
+      util.error(message);
+      return;
+    }
+  }
+
   const { deliveriesMade, total } = getDeliveriesMadeAndTotal(userZips);
   const productOfEachDay = calculateProductOfEachDay(total);
   const moneyFromDeliveries = util.sumContentsOfArray(productOfEachDay);
@@ -53,12 +67,10 @@ function individialDayFormHandler(e) {
 
   // daily message the user will see when at the total screen
   const messageForTheDay =
-    `
-    You made '${deliveriesMade}' deliveries.\n
-    Therefore, you earned $${gasMoney} in gas.\n
-    You made $${moneyFromDeliveries} in deliveries.\n
-    Your total amount earned is $${totalMoneyMade}.\n
-    `;
+    `You made '${deliveriesMade}' deliveries.
+    Therefore, you earned $${gasMoney} in gas.
+    You made $${moneyFromDeliveries} in deliveries.
+    Your total amount earned is $${totalMoneyMade}.\n\n`;
   messagesForEachDay.push(messageForTheDay);
 
   // if you reach the max daysOfWork, then proceed to show the total screen with all the calculations
@@ -154,16 +166,37 @@ function toggleFormVisibility(forms) {
 // create <p> element for each item within messagesForEachDay and append to totalDiv (global reference)
 function displayMessagesForEachDay() {
   for (let day = 0; day < messagesForEachDay.length; day++) {
-    const paragraphElement = util.createElement('p');
-    const fullMessage = `\nDay ${day + 1}:\n\n${messagesForEachDay[day]}\n\n`;
-    paragraphElement.innerText = fullMessage;
-    util.appendToNode(totalDiv, paragraphElement);
+    // title for each message
+    const title = util.createElement('h1');
+    title.innerText = `Day ${day + 1}:`;
+
+    // actual message for the day
+    const message = util.createElement('p');
+    message.innerText = '\n' + messagesForEachDay[day];
+
+    // appending to totalDiv
+    util.appendToNode(totalDiv, [title, message]);
   }
 }
 
 // display total amount of money made
 function displayTotalMoneyMade(totalForEachDay, daysOfWork) {
-  const totalElement = util.createElement('p');
-  totalElement.innerText = `\nTotal:\n\nYou made $${totalForEachDay} for working ${daysOfWork} day(s).`;
-  util.appendToNode(totalDiv, totalElement);
+  // title
+  const title = util.createElement('h1');
+  title.innerText = 'Total:';
+
+  // paragraph
+  const paragraph = util.createElement('p');
+  paragraph.innerText = '\nYou made ';
+
+  // actual money made
+  const span = util.createElement('span', 'green');
+  span.innerText = `$${totalForEachDay}`;
+
+  // amount of days worked
+  const days = document.createTextNode(` for working ${daysOfWork} day(s).`);
+
+  // appending everything to each other
+  util.appendToNode(paragraph, [span, days]);
+  util.appendToNode(totalDiv, [title, paragraph]);
 }
