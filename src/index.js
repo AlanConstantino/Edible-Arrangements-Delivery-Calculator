@@ -4,14 +4,17 @@ const util = require('./util.js');
 // our json zip code data
 const zipCodes = require('./zip-codes.json');
 
-// forms
-const daysOfWorkForm = document.forms[0];
-const individualDayForm = document.forms[1];
-const totalForm = document.forms[2];
+// References to forms
+const daysOfWorkForm = document.getElementById('days-of-work');
+const individualDayForm = document.getElementById('individual-day');
+const subtotalForm = document.getElementById('subtotal-for-day');
+const totalForm = document.getElementById('total-breakdown');
 
-// global variables
+// global counter
 let dayCounter = 1;
 let daysOfWork = 0;
+
+// global variables where we will save our data to
 const moneyMadeEachDay = [];
 const messagesForEachDay = [];
 const subtotal = [];
@@ -21,6 +24,8 @@ const totalDiv = document.getElementById('total');
 const daysInput = document.getElementById('days');
 const dayNumberSpan = document.getElementById('day-number');
 const rawZipCodesTextArea = document.getElementById('raw-zip-codes');
+const subtotalDiv = document.getElementById('subtotal');
+const subtotalDayCounterSpan = document.getElementById('subtotal-day-counter');
 
 daysOfWorkForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -32,13 +37,39 @@ daysOfWorkForm.addEventListener('submit', e => {
     return;
   }
 
+  // hide current form and display individualDayForm
   toggleFormVisibility([daysOfWorkForm, individualDayForm]);
-  updateDayNumberSpan(dayCounter); // <span> of second form
 });
 
-individualDayForm.addEventListener('submit', e => individialDayFormHandler(e));
+subtotalForm.addEventListener('reset', (e) => {
+  e.preventDefault();
 
-function individialDayFormHandler(e) {
+  // removing saved data
+  subtotal.pop();
+  moneyMadeEachDay.pop();
+  messagesForEachDay.pop();
+
+  toggleFormVisibility([subtotalForm, individualDayForm]);
+});
+
+subtotalForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  toggleFormVisibility([subtotalForm, individualDayForm]);
+  individualDayForm.reset();
+  dayCounter++;
+  util.updateElementInnerText(dayNumberSpan, dayCounter);
+
+  // if you reach the max daysOfWork, then proceed to show the total screen with all the calculations
+  if (dayCounter === daysOfWork + 1) {
+    const subtotalForAllDays = calculateSubtotalForAllDays(subtotal);
+    displayBreakdownOfTotal(subtotalForAllDays);
+  }
+});
+
+individualDayForm.addEventListener('submit', e => individualDayFormHandler(e));
+
+function individualDayFormHandler(e) {
   e.preventDefault();
 
   const userZips = rawZipCodesTextArea.value
@@ -46,8 +77,9 @@ function individialDayFormHandler(e) {
     .replace(/\n+/g, '\n')
     .split('\n');
 
-  // has to be for loop because a for-each loop is treated as a function which means if you
-  // were to return out, you return out of the for-each function and not individialDayFormHandler()
+  // Verifying each zip code is valid.
+  // The following has to be for loop because a for-each loop is treated as a function which means if you
+  // were to return out, you return out of the for-each function and not individualDayFormHandler()
   for (let i = 0; i < userZips.length; i++) {
     const zipIsNotValid = !util.isValid(zipCodes[userZips[i]]);
     if (zipIsNotValid) {
@@ -57,10 +89,20 @@ function individialDayFormHandler(e) {
     }
   }
 
+  // saving data to global variables
+  saveAndFormatData(userZips);
+
+  // display subtotal data for the day in the subtotal form
+  const totalForCurrentDay = messagesForEachDay[messagesForEachDay.length - 1];
+  util.updateElementInnerText(subtotalDiv, totalForCurrentDay);
+  util.updateElementInnerText(subtotalDayCounterSpan, dayCounter);
+  toggleFormVisibility([individualDayForm, subtotalForm]);
+}
+
+// saving and formatting data to global variables that can be accessed later
+function saveAndFormatData(userZips) {
   const { deliveriesMade, total } = getDeliveriesMadeAndTotal(userZips);
   subtotal.push(total);
-  // console.log(`Deliveries made: ${deliveriesMade}`);
-  // console.log(total);
   const productOfEachDay = calculateProductOfEachDay(total);
   const moneyFromDeliveries = util.sumContentsOfArray(productOfEachDay);
   const gasMoney = calculateGasMoney(deliveriesMade);
@@ -76,19 +118,6 @@ function individialDayFormHandler(e) {
     You made $${moneyFromDeliveries} in deliveries.
     Your total amount earned is $${totalMoneyMade}.\n\n`;
   messagesForEachDay.push(messageForTheDay);
-
-  // if you reach the max daysOfWork, then proceed to show the total screen with all the calculations
-  if (dayCounter === daysOfWork) {
-    const subtotalForAllDays = calculateSubtotalForAllDays(subtotal);
-    displayBreakdownOfTotal(subtotalForAllDays);
-  }
-
-  // however, if you haven't reached the last dayOfWork, reset the form for the next day
-  if (dayCounter !== daysOfWork) {
-    individualDayForm.reset();
-    dayCounter++;
-    updateDayNumberSpan(dayCounter);
-  }
 }
 
 // You calculate gas money by determining the deliveriesMade
@@ -99,11 +128,6 @@ function calculateGasMoney(deliveriesMade) {
   if (deliveriesMade <= 10 && deliveriesMade > 0) gasMoney += 10;
   if (deliveriesMade >= 11) gasMoney += 20;
   return gasMoney;
-}
-
-// Updates the span tag with the id of 'day-number'
-function updateDayNumberSpan(day) {
-  dayNumberSpan.textContent = day;
 }
 
 // For each key value pair within total, multiply the value with the key to find out how much

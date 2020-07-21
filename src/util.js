@@ -45,5 +45,10 @@ module.exports = {
     }
 
     node.appendChild(nodeToAppend);
+  },
+
+  // updates the innerText of a given element with the innerText that was passed in
+  updateElementInnerText: (element, text) => {
+    element.innerText = text;
   }
 };
