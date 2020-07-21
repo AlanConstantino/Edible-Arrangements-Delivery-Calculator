@@ -4,15 +4,17 @@ const util = require('./util.js');
 // our json zip code data
 const zipCodes = require('./zip-codes.json');
 
-// forms
+// References to forms
 const daysOfWorkForm = document.getElementById('days-of-work');
 const individualDayForm = document.getElementById('individual-day');
 const subtotalForm = document.getElementById('subtotal-for-day');
 const totalForm = document.getElementById('total-breakdown');
 
-// global variables
+// global counter
 let dayCounter = 1;
 let daysOfWork = 0;
+
+// global variables where we will save our data to
 const moneyMadeEachDay = [];
 const messagesForEachDay = [];
 const subtotal = [];
@@ -22,6 +24,8 @@ const totalDiv = document.getElementById('total');
 const daysInput = document.getElementById('days');
 const dayNumberSpan = document.getElementById('day-number');
 const rawZipCodesTextArea = document.getElementById('raw-zip-codes');
+const subtotalDiv = document.getElementById('subtotal');
+const subtotalDayCounterSpan = document.getElementById('subtotal-day-counter');
 
 daysOfWorkForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -36,8 +40,6 @@ daysOfWorkForm.addEventListener('submit', e => {
   // hide current form and display individualDayForm
   toggleFormVisibility([daysOfWorkForm, individualDayForm]);
 });
-
-individualDayForm.addEventListener('submit', e => individualDayFormHandler(e));
 
 subtotalForm.addEventListener('reset', (e) => {
   e.preventDefault();
@@ -56,7 +58,7 @@ subtotalForm.addEventListener('submit', (e) => {
   toggleFormVisibility([subtotalForm, individualDayForm]);
   individualDayForm.reset();
   dayCounter++;
-  updateDayNumberSpan(dayCounter);
+  util.updateElementInnerText(dayNumberSpan, dayCounter);
 
   // if you reach the max daysOfWork, then proceed to show the total screen with all the calculations
   if (dayCounter === daysOfWork + 1) {
@@ -64,6 +66,8 @@ subtotalForm.addEventListener('submit', (e) => {
     displayBreakdownOfTotal(subtotalForAllDays);
   }
 });
+
+individualDayForm.addEventListener('submit', e => individualDayFormHandler(e));
 
 function individualDayFormHandler(e) {
   e.preventDefault();
@@ -85,13 +89,13 @@ function individualDayFormHandler(e) {
     }
   }
 
+  // saving data to global variables
   saveAndFormatData(userZips);
 
   // display subtotal data for the day in the subtotal form
-  const subtotalDiv = document.getElementById('subtotal');
-  const subtotalDayCounterSpan = document.getElementById('subtotal-day-counter');
-  subtotalDiv.innerText = messagesForEachDay[messagesForEachDay.length - 1];
-  subtotalDayCounterSpan.innerText = dayCounter;
+  const totalForCurrentDay = messagesForEachDay[messagesForEachDay.length - 1];
+  util.updateElementInnerText(subtotalDiv, totalForCurrentDay);
+  util.updateElementInnerText(subtotalDayCounterSpan, dayCounter);
   toggleFormVisibility([individualDayForm, subtotalForm]);
 }
 
@@ -124,11 +128,6 @@ function calculateGasMoney(deliveriesMade) {
   if (deliveriesMade <= 10 && deliveriesMade > 0) gasMoney += 10;
   if (deliveriesMade >= 11) gasMoney += 20;
   return gasMoney;
-}
-
-// Updates the span tag with the id of 'day-number'
-function updateDayNumberSpan(day) {
-  dayNumberSpan.textContent = day;
 }
 
 // For each key value pair within total, multiply the value with the key to find out how much
