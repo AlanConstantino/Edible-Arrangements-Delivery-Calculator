@@ -22,13 +22,13 @@
     </form>
     <!-- form for zip codes (hidden by default) -->
     <form id="individual-day" class="hide">
-        <label for="zipcodes">Enter zip codes for day <span id="day-number"></span>:</label>
+        <label for="zipcodes">Enter zip codes for day <span id="day-number">1</span>:</label>
         <textarea name="zipcodes" id="raw-zip-codes" cols="5" rows="40"></textarea>
         <input class="button" type="submit" value="Submit">
     </form>
     <!-- form for subtotal of each day (hidden by default) -->
     <form id="subtotal-for-day" class="hide">
-        <h1>Subtotal</h1>
+        <h1>Subtotal for day <span id="subtotal-day-counter"></span>:</h1>
         <div id="subtotal"></div>
         <input class="button" type="reset" value="Go back">
         <input class="button" type="submit" value="Continue">
