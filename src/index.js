@@ -11,9 +11,10 @@ const totalForm = document.forms[2];
 
 // global variables
 let dayCounter = 1;
+let daysOfWork = 0;
 const moneyMadeEachDay = [];
 const messagesForEachDay = [];
-let daysOfWork = 0;
+const subtotal = [];
 
 // References to DOM elements
 const totalDiv = document.getElementById('total');
@@ -57,6 +58,9 @@ function individialDayFormHandler(e) {
   }
 
   const { deliveriesMade, total } = getDeliveriesMadeAndTotal(userZips);
+  subtotal.push(total);
+  // console.log(`Deliveries made: ${deliveriesMade}`);
+  // console.log(total);
   const productOfEachDay = calculateProductOfEachDay(total);
   const moneyFromDeliveries = util.sumContentsOfArray(productOfEachDay);
   const gasMoney = calculateGasMoney(deliveriesMade);
@@ -75,7 +79,8 @@ function individialDayFormHandler(e) {
 
   // if you reach the max daysOfWork, then proceed to show the total screen with all the calculations
   if (dayCounter === daysOfWork) {
-    displayBreakdownOfTotal();
+    const subtotalForAllDays = calculateSubtotalForAllDays(subtotal);
+    displayBreakdownOfTotal(subtotalForAllDays);
   }
 
   // however, if you haven't reached the last dayOfWork, reset the form for the next day
@@ -145,11 +150,11 @@ function getDeliveriesMadeAndTotal(userZips) {
 }
 
 // display the total amount of money made for each day and the total overall for all days
-function displayBreakdownOfTotal() {
+function displayBreakdownOfTotal(subtotalForAllDays) {
   toggleFormVisibility([individualDayForm, totalForm]);
   const totalForEachDay = util.sumContentsOfArray(moneyMadeEachDay);
   displayMessagesForEachDay();
-  displayTotalMoneyMade(totalForEachDay, daysOfWork);
+  displayTotalMoneyMade(totalForEachDay, daysOfWork, subtotalForAllDays);
 }
 
 // This function toggles form visibility by toggling the 'hide' class
@@ -180,14 +185,34 @@ function displayMessagesForEachDay() {
 }
 
 // display total amount of money made
-function displayTotalMoneyMade(totalForEachDay, daysOfWork) {
-  // title
-  const title = util.createElement('h1');
-  title.innerText = 'Total:';
+function displayTotalMoneyMade(totalForEachDay, daysOfWork, subtotalForAllDays) {
+  // subtotal title
+  const subtotalTitle = util.createElement('h1');
+  subtotalTitle.innerText = 'Subtotal:';
 
-  // paragraph
-  const paragraph = util.createElement('p');
-  paragraph.innerText = '\nYou made ';
+  // subtotal
+  const subtotal = util.createElement('p');
+  const amount = (
+    (5 * subtotalForAllDays[5]) +
+    (6 * subtotalForAllDays[6]) +
+    (7 * subtotalForAllDays[7]) +
+    (8 * subtotalForAllDays[8])
+  );
+  subtotal.innerText = `
+  5 x ${subtotalForAllDays[5]} = ${5 * subtotalForAllDays[5]}
+  6 x ${subtotalForAllDays[6]} = ${6 * subtotalForAllDays[6]}
+  7 x ${subtotalForAllDays[7]} = ${7 * subtotalForAllDays[7]}
+  8 x ${subtotalForAllDays[8]} = ${8 * subtotalForAllDays[8]}
+  Your subtotal is $${amount}\n
+  `;
+
+  // total title
+  const totalTitle = util.createElement('h1');
+  totalTitle.innerText = 'Total:';
+
+  // total paragraph
+  const total = util.createElement('p');
+  total.innerText = '\nYou made ';
 
   // actual money made
   const span = util.createElement('span', 'green');
@@ -197,6 +222,25 @@ function displayTotalMoneyMade(totalForEachDay, daysOfWork) {
   const days = document.createTextNode(` for working ${daysOfWork} day(s).`);
 
   // appending everything to each other
-  util.appendToNode(paragraph, [span, days]);
-  util.appendToNode(totalDiv, [title, paragraph]);
+  util.appendToNode(total, [span, days]);
+  util.appendToNode(totalDiv, [subtotalTitle, subtotal, totalTitle, total]);
+}
+
+// subtotal is an array
+// each element within the subtotal array is an object
+// returns an object
+function calculateSubtotalForAllDays(subtotal) {
+  const subtotalForAllDays = {
+    5: 0,
+    6: 0,
+    7: 0,
+    8: 0
+  };
+  for (const element of subtotal) {
+    for (const key in element) {
+      if (element[key] === 0) continue;
+      subtotalForAllDays[key] += element[key];
+    }
+  }
+  return subtotalForAllDays;
 }
