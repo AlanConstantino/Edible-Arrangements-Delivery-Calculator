@@ -20,20 +20,21 @@
         <input type="number" id="days" min="1" max="7">
         <input class="button" type="submit" value="Submit">
     </form>
-    <!-- form for zip codes -->
+    <!-- form for zip codes (hidden by default) -->
     <form id="individual-day" class="hide">
         <label for="zipcodes">Enter zip codes for day <span id="day-number"></span>:</label>
         <textarea name="zipcodes" id="raw-zip-codes" cols="5" rows="40"></textarea>
         <input class="button" type="submit" value="Submit">
     </form>
-    <form id="subtotal-for-day">
+    <!-- form for subtotal of each day (hidden by default) -->
+    <form id="subtotal-for-day" class="hide">
         <h1>Subtotal</h1>
         <div id="subtotal"></div>
         <input class="button" type="reset" value="Go back">
         <input class="button" type="submit" value="Continue">
     </form>
-    <!-- form for total -->
-    <form class="hide">
+    <!-- form for total (hidden by default) -->
+    <form id="total-breakdown" class="hide">
         <div id="total"></div>
         <input class="button" type="submit" value="Restart">
     </form>
