@@ -18,6 +18,7 @@ let daysOfWork = 0;
 const moneyMadeEachDay = [];
 const messagesForEachDay = [];
 const subtotal = [];
+const dailyAmountOfDeliveriesToZips = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 }; // contains zip codes for each day
 
 // References to DOM elements
 const totalDiv = document.getElementById('total');
@@ -41,6 +42,7 @@ daysOfWorkForm.addEventListener('submit', e => {
   toggleFormVisibility([daysOfWorkForm, individualDayForm]);
 });
 
+// triggered whenever a user clicks 'go back' on a form
 subtotalForm.addEventListener('reset', (e) => {
   e.preventDefault();
 
@@ -51,6 +53,8 @@ subtotalForm.addEventListener('reset', (e) => {
 
   toggleFormVisibility([subtotalForm, individualDayForm]);
 });
+
+individualDayForm.addEventListener('submit', e => individualDayFormHandler(e));
 
 subtotalForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -67,8 +71,6 @@ subtotalForm.addEventListener('submit', (e) => {
   }
 });
 
-individualDayForm.addEventListener('submit', e => individualDayFormHandler(e));
-
 function individualDayFormHandler(e) {
   e.preventDefault();
 
@@ -78,8 +80,6 @@ function individualDayFormHandler(e) {
     .split('\n');
 
   // Verifying each zip code is valid.
-  // The following has to be for loop because a for-each loop is treated as a function which means if you
-  // were to return out, you return out of the for-each function and not individualDayFormHandler()
   for (let i = 0; i < userZips.length; i++) {
     const zipIsNotValid = !util.isValid(zipCodes[userZips[i]]);
     if (zipIsNotValid) {
@@ -101,6 +101,10 @@ function individualDayFormHandler(e) {
 
 // saving and formatting data to global variables that can be accessed later
 function saveAndFormatData(userZips) {
+  // saves a list of tuple arrays to the global variable dailyAmountOfDeliveriesToZips
+  // tuple array consists of the following => [[zip, deliveriesMadeToZip], [..., ...], ...]
+  saveZips(userZips);
+
   const { deliveriesMade, total } = getDeliveriesMadeAndTotal(userZips);
   subtotal.push(total);
   const productOfEachDay = calculateProductOfEachDay(total);
@@ -119,6 +123,45 @@ function saveAndFormatData(userZips) {
     Your total amount earned is $${totalMoneyMade}.\n\n`;
   messagesForEachDay.push(messageForTheDay);
 }
+
+// saves a list of tuple arrays to the global variable dailyAmountOfDeliveriesToZips
+// the tuple array itself consists of the zip code and how many deliveries were made to that zip code like so:
+// tuple array => [zip, deliveriesMadeToZip]
+// argument "userZips" is an array of zip codes which are strings
+
+
+// This looks gross but it's late, it works, and I want to go to bed.
+function saveZips(userZips) {
+  const listOfTuples = [];
+
+  // Magic. Do not touch.
+  for (let i = 0; i < userZips.length; i++) {
+    let deliveriesMadeToZip = 1;
+    let zip = '';
+    let zipIsPresentInListOfTuples = false;
+
+    for (let j = i + 1; j < userZips.length + 1; j++) {
+      zip = userZips[i];
+      const zipIsADuplicate = userZips[i] === userZips[j];
+      if (zipIsADuplicate) {
+        deliveriesMadeToZip++;
+      }
+    }
+
+    listOfTuples.forEach(tuple => {
+      const zipIsPresentInData = tuple[0] === userZips[i];
+      if (zipIsPresentInData) {
+        zipIsPresentInListOfTuples = true;
+      }
+    });
+
+    if (zipIsPresentInListOfTuples) continue;
+    listOfTuples.push([zip, deliveriesMadeToZip]);
+  }
+
+  dailyAmountOfDeliveriesToZips[dayCounter] = listOfTuples;
+}
+
 
 // You calculate gas money by determining the deliveriesMade
 // - if you make 10 deliveries or less, you get $10
@@ -212,7 +255,7 @@ function displayMessagesForEachDay() {
 function displayTotalMoneyMade(totalForEachDay, daysOfWork, subtotalForAllDays) {
   // subtotal title
   const subtotalTitle = util.createElement('h1');
-  subtotalTitle.innerText = 'Subtotal:';
+  subtotalTitle.innerHTML = 'Subtotal:<br><br>';
 
   // subtotal
   const subtotal = util.createElement('p');
@@ -222,7 +265,33 @@ function displayTotalMoneyMade(totalForEachDay, daysOfWork, subtotalForAllDays) 
     (7 * subtotalForAllDays[7]) +
     (8 * subtotalForAllDays[8])
   );
-  subtotal.innerText = `
+
+  // You have to sum all the same zip codes in dailyAmountOfDeliveriesToZips; Sum gets saved to zipsAndDeliveries
+  const zipsAndDeliveries = {};
+  const flatArray = getZipsAndValuesFromdailyAmountOfDeliveriesToZips();
+
+  flatArray.forEach(tuple => {
+    const zip = tuple[0];
+    const value = tuple[1];
+
+    if (zip in zipsAndDeliveries) {
+      zipsAndDeliveries[zip] += value;
+      return;
+    }
+
+    zipsAndDeliveries[zip] = value;
+  });
+
+  // displaying zips and deliveries made to zips on DOM
+  for (const zip in zipsAndDeliveries) {
+    if (zipsAndDeliveries[zip] === 1) {
+      subtotal.innerHTML += `'${zipsAndDeliveries[zip]}' delivery was made to ${zip}.<br>`
+      continue;
+    }
+    subtotal.innerHTML += `'${zipsAndDeliveries[zip]}' deliveries were made to ${zip}.<br>`
+  }
+
+  subtotal.innerText += `\n
   5 x ${subtotalForAllDays[5]} = ${5 * subtotalForAllDays[5]}
   6 x ${subtotalForAllDays[6]} = ${6 * subtotalForAllDays[6]}
   7 x ${subtotalForAllDays[7]} = ${7 * subtotalForAllDays[7]}
@@ -248,6 +317,19 @@ function displayTotalMoneyMade(totalForEachDay, daysOfWork, subtotalForAllDays) 
   // appending everything to each other
   util.appendToNode(total, [span, days]);
   util.appendToNode(totalDiv, [subtotalTitle, subtotal, totalTitle, total]);
+}
+
+// returns a flat array of tuple arrays containing the zip code and deliveries made to the zip code
+// i.e. [ [zip1, deliveries], [zip2, deliveries], ... ]
+function getZipsAndValuesFromdailyAmountOfDeliveriesToZips() {
+  const array = [];
+  for (const key in dailyAmountOfDeliveriesToZips) {
+    const valueIsEmpty = dailyAmountOfDeliveriesToZips[key] === 0;
+    if (!valueIsEmpty) {
+      array.push(dailyAmountOfDeliveriesToZips[key]);
+    }
+  }
+  return array.flat();
 }
 
 // subtotal is an array

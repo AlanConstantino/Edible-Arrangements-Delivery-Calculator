@@ -1,7 +1,7 @@
 // Utility functions
 module.exports = {
   // Create a DOM element
-  createElement: function(typeOfElement = 'div', classes = '') {
+  createElement: function (typeOfElement = 'div', classes = '') {
     const element = document.createElement(typeOfElement);
     if (classes === '') return element;
     if (Array.isArray(classes)) classes.forEach(cssClass => element.classList.add(cssClass));
@@ -20,9 +20,9 @@ module.exports = {
   // else return true
   isValid: (thingToValidate) => {
     if (thingToValidate === '' ||
-        thingToValidate === undefined ||
-        thingToValidate === null ||
-        isNaN(thingToValidate)) {
+      thingToValidate === undefined ||
+      thingToValidate === null ||
+      isNaN(thingToValidate)) {
       return false;
     }
 
