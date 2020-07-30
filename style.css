@@ -7,6 +7,32 @@
     box-sizing: border-box;
 }
 
+/* START OF TABLE CSS */
+.table-container {
+    display: block;
+    margin: auto;
+}
+@media only screen and (max-width: 760px) {
+    .table-container {
+        overflow-x: auto;
+        margin: 0;
+    }
+}
+table {
+    display: block;
+    box-sizing: border-box;
+    border-collapse: collapse;
+}
+td, th {
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #ffffff;
+}
+td:hover, th:hover {
+    background-color: #4f4f4f;
+}
+/* END OF TABLE CSS */
+
 html {
     background-color: #303030;
 }

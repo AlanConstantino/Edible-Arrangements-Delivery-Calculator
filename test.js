@@ -12,3 +12,13 @@
 // Add an HTML form prompting the user what store they're from
 //  - Depending on what store they choose, the zip-codes.json file will get loaded for that store
 
+
+const form = document.getElementById('days-of-work');
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+});
+
+const emailBtn = document.getElementById('email-button');
+emailBtn.addEventListener('click', (e) => {
+    console.log(emailBtn.href += '\nThis is another message.');
+});

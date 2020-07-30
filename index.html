@@ -19,6 +19,11 @@
         <label for="days">How many days did you work for?</label>
         <input type="number" id="days" min="1" max="7">
         <input class="button" type="submit" value="Submit">
+        <!-- <button id="button">Download!</button> -->
+
+        <!-- <a id="email-button" href="mailto:abc@example.com?subject=Feedback&body=This is a message.">
+            Send Feedback
+        </a> -->
     </form>
     <!-- form for zip codes (hidden by default) -->
     <form id="individual-day" class="hide">
@@ -35,10 +40,63 @@
     </form>
     <!-- form for total (hidden by default) -->
     <form id="total-breakdown" class="hide">
-        <div id="total"></div>
+        <div id="total">
+            <div id="daily-deliveries-container"></div>
+
+            <div id="subtotal-container">
+                <h1>Subtotal:</h1><br>
+                <div class="table-container">
+                    <table id="table">
+                        <!-- The first row of the table -->
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <th>Day 1</th>
+                                <th>Day 2</th>
+                                <th>Day 3</th>
+                                <th>Day 4</th>
+                                <th>Day 5</th>
+                                <th>Day 6</th>
+                                <th>Day 7</th>
+                            </tr>
+                        </thead>
+                        <!-- The main table contents -->
+                        <tbody id="tbody">
+                            <tr id="tbody-zip-data" class="hide">
+                                <th>zip here</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        <!-- Sum of zips for each day -->
+                        <tfoot>
+                            <tr>
+                                <th>Total</th>
+                                <td id="day-1-total"></td>
+                                <td id="day-2-total"></td>
+                                <td id="day-3-total"></td>
+                                <td id="day-4-total"></td>
+                                <td id="day-5-total"></td>
+                                <td id="day-6-total"></td>
+                                <td id="day-7-total"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div><br>
+            </div><br>
+            <div id="total-container">
+                <h1>Total:</h1><br>
+            </div>
+        </div>
         <input class="button" type="submit" value="Restart">
     </form>
     <script src="./dist/main.js"></script>
+    <!-- <script src="./src/table.js"></script> -->
     <!-- <script src="./test.js"></script> -->
     <!-- <script src="./src/index.js"></script> -->
 </body>
