@@ -7,6 +7,32 @@
     box-sizing: border-box;
 }
 
+/* START OF TABLE CSS */
+.table-container {
+    display: block;
+    margin: auto;
+}
+@media only screen and (max-width: 760px) {
+    .table-container {
+        overflow-x: auto;
+        margin: 0;
+    }
+}
+table {
+    display: block;
+    box-sizing: border-box;
+    border-collapse: collapse;
+}
+td, th {
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #ffffff;
+}
+td:hover, th:hover {
+    background-color: #4f4f4f;
+}
+/* END OF TABLE CSS */
+
 html {
     background-color: #303030;
 }
@@ -16,7 +42,6 @@ body {
     padding: 0 8%;
     padding-top: 1rem;
     padding-bottom: 4rem;
-    text-align: center;
 }
 
 form {
@@ -34,7 +59,14 @@ textarea {
     display: none;
 }
 
+a {
+    text-decoration: none;
+    margin-top: 1rem;
+}
+
 .button {
+    /* margin-top: 1rem; */
+    text-align: center;
     background-color: transparent;
     border: 0.1rem solid #ffffff;
     outline: none;
@@ -46,6 +78,10 @@ textarea {
     cursor: pointer;
     color: #303030;
     background-color: #ffffff;
+}
+
+label {
+    text-align: center;
 }
 
 input, textarea {
