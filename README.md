@@ -4,7 +4,6 @@ I made this calculator to help me get the total amount of money earned by making
 
 You can view the website [here](https://calc.alanconstantino.com/).
 
-
 ### Technologies used:
 - Node.js
   - To manage packages and dependecies such as ESLint, Babel, and Webpack.
@@ -12,10 +11,16 @@ You can view the website [here](https://calc.alanconstantino.com/).
   - For bundling all JavaScript files into a single file.
 - Babel
   - For cross-browser compatible JavaScript.
+- [Table to Excel 2](https://github.com/linways/table-to-excel)
+  - Converts table data into a downloadable excel sheet.
+
+## Install
+1. git clone https://github.com/AlanConstantino/Edible-Arrangements-Delivery-Calculator.git
+2. npm install
 
 ## TODO:
 - [x] Add new styles to the forms.
-- [ ] See if it's viable to add a button that allows you to download all the data either as a PDF or an excel sheet which mimics the Edible Arrangements sheet.
+- [x] See if it's viable to add a button that allows you to download all the data either as a PDF or an excel sheet which mimics the Edible Arrangements sheet.
 
 ## Bugs
 - [x] When entering zip codes for each day of work, you are able to submit the form without zip codes. Should prompt the user for an error telling them to enter a zip code. Should also not move on to next day until zip codes for the current day are given.
