@@ -1,19 +1,3 @@
-// // // // DOWNLOADING A FILE CLIENT-SIDE
-// // // // install: npm install --save-dev downloadjs
-// // // const download = require('downloadjs');
-// // const button = document.getElementById('button');
-// // // button.addEventListener('click', (e) => {
-// // //   e.preventDefault();
-// // //   download('../excel-example.xls', "mytext.txt", "text/plain");
-// // // });
-
-// // button.addEventListener('click', (e) => {
-// //   e.preventDefault();
-// // });
-
-
-
-
 // our table functionality
 const table = require('./table.js');
 
@@ -38,11 +22,10 @@ const moneyMadeEachDay = [];
 const messagesForEachDay = [];
 const subtotal = [];
 const totalDeliveriesEachDay = [];
-export const zipsAndDeliveries = {};
-export const dailyAmountOfDeliveriesToZips = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 }; // contains zip codes for each day
+const zipsAndDeliveries = {};
+const dailyAmountOfDeliveriesToZips = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 }; // contains zip codes for each day
 
 // References to DOM elements
-const totalDiv = document.getElementById('total');
 const daysInput = document.getElementById('days');
 const dayNumberSpan = document.getElementById('day-number');
 const rawZipCodesTextArea = document.getElementById('raw-zip-codes');
@@ -150,7 +133,7 @@ function saveAndFormatData(userZips) {
 // saves a list of tuple arrays to the global variable dailyAmountOfDeliveriesToZips
 // the tuple array itself consists of the zip code and how many deliveries were made to that zip code like so:
 // tuple array => [zip, deliveriesMadeToZip]
-// argument "userZips" is an array of zip codes which are strings
+// parameter "userZips" is an array of zip codes which are strings
 
 // This looks gross but it's late, it works, and I want to go to bed.
 function saveZips(userZips) {

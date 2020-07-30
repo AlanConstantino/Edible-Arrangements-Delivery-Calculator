@@ -1,11 +1,11 @@
-const util = require('./util.js');
+// will allow us to download the table data as an excel sheet
+import TableToExcel from "@linways/table-to-excel";
 
-// tbody elements
-const tbody = document.getElementById('tbody');
-const zipData = document.getElementById('tbody-zip-data');
+const util = require('./util.js');
+const templateZipData = document.getElementById('tbody-zip-data');
 
 function cloneTbodyZipData() {
-    const clonedData = zipData.cloneNode(true);
+    const clonedData = templateZipData.cloneNode(true);
     clonedData.removeAttribute('id');
     clonedData.removeAttribute('class');
     return clonedData;
@@ -49,6 +49,7 @@ function setTotalSum(totalDeliveriesEachDay) {
 }
 
 export function init(dailyAmountOfDeliveriesToZips, zipsAndDeliveries, totalDeliveriesEachDay) {
+    const tbody = document.getElementById('tbody');
     for (const zip in zipsAndDeliveries) {
         const clonedTbodyZipData = cloneTbodyZipData();
         util.appendToNode(tbody, clonedTbodyZipData);
@@ -59,7 +60,6 @@ export function init(dailyAmountOfDeliveriesToZips, zipsAndDeliveries, totalDeli
         tableCells.forEach((cell, i) => {
             const day = i + 1; // +1 to offset starting at 0
             const columnZip = th.innerText;
-            console.log(dailyAmountOfDeliveriesToZips[day]);
             const valueIsEmpty = dailyAmountOfDeliveriesToZips[day] === 0;
 
             if (valueIsEmpty) return;
@@ -73,5 +73,21 @@ export function init(dailyAmountOfDeliveriesToZips, zipsAndDeliveries, totalDeli
             }
         });
     }
+
     setTotalSum(totalDeliveriesEachDay);
 }
+
+const excelDownloadButton = document.getElementById('download-excel-data');
+excelDownloadButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    const table = document.getElementById('table');
+    templateZipData.remove();
+
+    TableToExcel.convert(table, {
+        name: 'deliveries-data.xlsx',
+        sheet: {
+            name: 'Weekly Deliveries'
+        }
+    });
+});
+
