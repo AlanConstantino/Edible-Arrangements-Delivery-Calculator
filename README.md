@@ -1,8 +1,8 @@
-# [Edible-Arrangements-Delivery-Calculator](https://ea.alanconstantino.com/)
+# [Edible-Arrangements-Delivery-Calculator](https://ea.alanjc.com/)
 
 I made this calculator to help me get the total amount of money earned by making Edible Arrangements deliveries.
 
-You can view the website [here](https://ea.alanconstantino.com/).
+You can view the website [here](https://ea.alanjc.com/).
 
 ### Technologies used:
 - Node.js
